@@ -1,0 +1,10 @@
+bin/
+obj/
+.vs/
+*.user
+*.suo
+data/
+docs/
+tools/refasm/
+analysis/
+AGENTS.md

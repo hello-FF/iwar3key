@@ -1,0 +1,145 @@
+<UserControl x:Class="IWar3Key.Shell.Pages.GameSettingsPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:IWar3Key.Shell.Controls">
+  <StackPanel Margin="0,0,0,4">
+    <TextBlock Text="游戏设置" Style="{StaticResource PageTitleStyle}" Margin="0,0,0,12" />
+
+    <Border Style="{StaticResource CardStyle}">
+      <StackPanel>
+        <Grid>
+          <StackPanel Orientation="Horizontal">
+            <controls:Icon Kind="monitor" Width="14" Height="14" Stroke="{StaticResource AccentBrush}" VerticalAlignment="Center" />
+            <TextBlock Text="窗口" Style="{StaticResource CardTitleStyle}" Margin="7,0,0,0" />
+          </StackPanel>
+          <ToggleButton Style="{StaticResource SwitchStyle}" HorizontalAlignment="Right"
+                        IsChecked="{Binding Window.Enabled}" ToolTip="启用窗口设置" />
+        </Grid>
+
+        <Grid Margin="0,10,0,0" IsEnabled="{Binding Window.Enabled}" Style="{StaticResource FadeWhenDisabled}">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+          </Grid.RowDefinitions>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+          </Grid.ColumnDefinitions>
+
+          <TextBlock Grid.Row="0" Text="无边框窗口" Style="{StaticResource LabelStyle}" />
+          <ToggleButton Grid.Row="0" Grid.Column="1" Style="{StaticResource SwitchStyle}" IsChecked="{Binding Window.Borderless}" />
+
+          <TextBlock Grid.Row="1" Text="窗口置顶" Style="{StaticResource LabelStyle}" Margin="0,9,0,0" />
+          <ToggleButton Grid.Row="1" Grid.Column="1" Style="{StaticResource SwitchStyle}" IsChecked="{Binding Window.AlwaysOnTop}" Margin="0,9,0,0" />
+
+          <TextBlock Grid.Row="2" Text="锁定鼠标" Style="{StaticResource LabelStyle}" Margin="0,9,0,0" />
+          <ToggleButton Grid.Row="2" Grid.Column="1" Style="{StaticResource SwitchStyle}" IsChecked="{Binding Window.ClipMouse}" Margin="0,9,0,0" />
+
+          <TextBlock Grid.Row="3" Text="分辨率" Style="{StaticResource LabelStyle}" Margin="0,11,0,0" />
+          <ComboBox x:Name="ResolutionCombo" Grid.Row="3" Grid.Column="1" Style="{StaticResource ComboStyle}"
+                    Width="154" Margin="0,9,0,0" SelectionChanged="ResolutionCombo_SelectionChanged" />
+
+          <Grid x:Name="CustomResRow" Grid.Row="4" Grid.ColumnSpan="2" Margin="0,8,0,0" Visibility="Collapsed">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="自定义分辨率" Style="{StaticResource LabelStyle}" />
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+              <TextBox Style="{StaticResource InputStyle}" Width="66" Text="{Binding Window.Width, UpdateSourceTrigger=PropertyChanged}" />
+              <TextBlock Text="×" Style="{StaticResource MutedStyle}" Margin="7,0" />
+              <TextBox Style="{StaticResource InputStyle}" Width="66" Text="{Binding Window.Height, UpdateSourceTrigger=PropertyChanged}" />
+              <TextBlock Text="px" Style="{StaticResource TinyMutedStyle}" Margin="6,0,0,0" />
+            </StackPanel>
+          </Grid>
+        </Grid>
+      </StackPanel>
+    </Border>
+
+    <Border Style="{StaticResource CardStyle}">
+      <StackPanel>
+        <Grid>
+          <StackPanel Orientation="Horizontal">
+            <controls:Icon Kind="monitor" Width="14" Height="14" Stroke="{StaticResource AccentBrush}" VerticalAlignment="Center" />
+            <TextBlock Text="视距" Style="{StaticResource CardTitleStyle}" Margin="7,0,0,0" />
+          </StackPanel>
+          <ToggleButton Style="{StaticResource SwitchStyle}" HorizontalAlignment="Right"
+                        IsChecked="{Binding Camera.Enabled}" ToolTip="启用视距增强" />
+        </Grid>
+
+        <StackPanel Margin="0,10,0,0" IsEnabled="{Binding Camera.Enabled}" Style="{StaticResource FadeWhenDisabled}">
+          <Grid>
+            <TextBlock Text="最大视距" Style="{StaticResource LabelStyle}" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+              <TextBox Style="{StaticResource InputStyle}" Width="68"
+                       Text="{Binding Camera.MaxDistance, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+          </Grid>
+
+          <Slider Margin="0,12,0,0" Minimum="1650" Maximum="3000" TickFrequency="50"
+                  IsSnapToTickEnabled="True" Style="{StaticResource SliderStyle}"
+                  Value="{Binding Camera.MaxDistance}" />
+
+          <Grid Margin="1,3,1,0">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="1650" Style="{StaticResource TinyMutedStyle}" />
+            <TextBlock Grid.Column="1" Text="2100" Style="{StaticResource TinyMutedStyle}" HorizontalAlignment="Center" />
+            <TextBlock Grid.Column="2" Text="2550" Style="{StaticResource TinyMutedStyle}" HorizontalAlignment="Center" />
+            <TextBlock Grid.Column="3" Text="3000" Style="{StaticResource TinyMutedStyle}" HorizontalAlignment="Right" />
+          </Grid>
+
+          <Grid Margin="0,14,0,0">
+            <TextBlock Text="拉远视距" Style="{StaticResource LabelStyle}" />
+            <controls:KeyCaptureButton Style="{StaticResource KeycapStyle}" Width="132"
+                                       HorizontalAlignment="Right" HorizontalContentAlignment="Center"
+                                       Chord="{Binding Camera.ZoomOutHotkey, Mode=TwoWay}" />
+          </Grid>
+
+          <Grid Margin="0,9,0,0">
+            <TextBlock Text="拉近视距" Style="{StaticResource LabelStyle}" />
+            <controls:KeyCaptureButton Style="{StaticResource KeycapStyle}" Width="132"
+                                       HorizontalAlignment="Right" HorizontalContentAlignment="Center"
+                                       Chord="{Binding Camera.ZoomInHotkey, Mode=TwoWay}" />
+          </Grid>
+        </StackPanel>
+      </StackPanel>
+    </Border>
+
+    <Border Style="{StaticResource CardStyle}">
+      <StackPanel>
+        <StackPanel Orientation="Horizontal">
+          <controls:Icon Kind="monitor" Width="14" Height="14" Stroke="{StaticResource AccentBrush}" VerticalAlignment="Center" />
+          <TextBlock Text="状态条" Style="{StaticResource CardTitleStyle}" Margin="7,0,0,0" />
+        </StackPanel>
+
+        <StackPanel Margin="0,10,0,0">
+          <Grid>
+            <TextBlock Text="始终显示生命条" Style="{StaticResource LabelStyle}" />
+            <ToggleButton Style="{StaticResource SwitchStyle}" HorizontalAlignment="Right"
+                          IsChecked="{Binding StatusBar.HealthEnabled}" />
+          </Grid>
+
+          <Grid Margin="0,9,0,0" IsEnabled="{Binding StatusBar.ManaEnabled}">
+            <TextBlock Text="显示友方魔法条" Style="{StaticResource LabelStyle}" />
+            <ToggleButton Style="{StaticResource SwitchStyle}" HorizontalAlignment="Right"
+                          IsChecked="{Binding StatusBar.FriendlyMana}" />
+          </Grid>
+
+          <Grid Margin="0,9,0,0" IsEnabled="{Binding StatusBar.ManaEnabled}">
+            <TextBlock Text="显示敌方魔法条" Style="{StaticResource LabelStyle}" />
+            <ToggleButton Style="{StaticResource SwitchStyle}" HorizontalAlignment="Right"
+                          IsChecked="{Binding StatusBar.EnemyMana}" />
+          </Grid>
+        </StackPanel>
+      </StackPanel>
+    </Border>
+  </StackPanel>
+</UserControl>

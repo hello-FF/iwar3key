@@ -1,0 +1,77 @@
+<UserControl x:Class="IWar3Key.Shell.Pages.MappingPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:IWar3Key.Shell.Controls">
+  <StackPanel Margin="0,0,0,4">
+    <Grid Margin="0,0,0,12">
+      <TextBlock Text="按键映射" Style="{StaticResource PageTitleStyle}" />
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+        <TextBlock Text="启用" Style="{StaticResource MutedStyle}" Margin="0,0,6,0" />
+        <ToggleButton Style="{StaticResource SwitchStyle}" IsChecked="{Binding Input.MappingEnabled}" />
+        <Button Style="{StaticResource BaseButtonStyle}" Margin="10,0,0,0" Click="AddMapping_Click">
+          <StackPanel Orientation="Horizontal">
+            <controls:Icon Kind="plus" Width="11" Height="11" Stroke="{StaticResource TextBrush}" />
+            <TextBlock Text="添加映射" Margin="5,0,0,0" />
+          </StackPanel>
+        </Button>
+      </StackPanel>
+    </Grid>
+
+    <Border Style="{StaticResource CardStyle}">
+      <StackPanel>
+        <Grid Margin="8,0,8,7">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="84" />
+            <ColumnDefinition Width="28" />
+            <ColumnDefinition Width="84" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="34" />
+            <ColumnDefinition Width="30" />
+          </Grid.ColumnDefinitions>
+          <TextBlock Grid.Column="0" Text="游戏原键" Style="{StaticResource TinyMutedStyle}"
+                     HorizontalAlignment="Center" ToolTip="游戏里的原生按键" />
+          <TextBlock Grid.Column="1" Text="→" Style="{StaticResource TinyMutedStyle}"
+                     HorizontalAlignment="Center" ToolTip="按下右侧改键后按键时，发送左侧游戏原键" />
+          <TextBlock Grid.Column="2" Text="改后新键" Style="{StaticResource TinyMutedStyle}"
+                     HorizontalAlignment="Center" ToolTip="改键后你实际按下的新按键" />
+          <TextBlock Grid.Column="4" Text="启用" Style="{StaticResource TinyMutedStyle}" HorizontalAlignment="Center" />
+        </Grid>
+
+        <ItemsControl ItemsSource="{Binding Input.Mappings}" IsEnabled="{Binding Input.MappingEnabled}"
+                      Style="{StaticResource FadeWhenDisabled}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <Border Background="{StaticResource PanelSoftBrush}" BorderBrush="{StaticResource LineSoftBrush}"
+                      BorderThickness="1" CornerRadius="6" Padding="8,6" Margin="0,0,0,6">
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="84" />
+                    <ColumnDefinition Width="28" />
+                    <ColumnDefinition Width="84" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="34" />
+                    <ColumnDefinition Width="30" />
+                  </Grid.ColumnDefinitions>
+
+                  <controls:KeyCaptureButton Grid.Column="0" Style="{StaticResource SourceKeycapStyle}"
+                                             HorizontalContentAlignment="Center" Chord="{Binding From, Mode=TwoWay}" />
+                  <controls:Icon Grid.Column="1" Kind="arrow" Width="13" Height="13"
+                                 Stroke="{StaticResource Muted2Brush}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                  <controls:KeyCaptureButton Grid.Column="2" Style="{StaticResource TargetKeycapStyle}"
+                                             HorizontalContentAlignment="Center" Chord="{Binding To, Mode=TwoWay}" />
+                  <ToggleButton Grid.Column="4" Style="{StaticResource SwitchStyle}" IsChecked="{Binding Enabled}"
+                                HorizontalAlignment="Center" VerticalAlignment="Center" />
+                  <Button Grid.Column="5" Style="{StaticResource DangerIconButtonStyle}" Click="DeleteMapping_Click"
+                          Tag="{Binding}" ToolTip="删除映射">
+                    <controls:Icon Kind="trash" Width="12" Height="12"
+                                   Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
+                  </Button>
+                </Grid>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </StackPanel>
+    </Border>
+  </StackPanel>
+</UserControl>

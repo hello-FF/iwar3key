@@ -1,0 +1,62 @@
+<UserControl x:Class="IWar3Key.Shell.Pages.SkillsPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:IWar3Key.Shell.Controls">
+  <StackPanel Margin="0,0,0,4">
+    <Grid Margin="0,0,0,12">
+      <TextBlock Text="技能改键" Style="{StaticResource PageTitleStyle}" />
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+        <Button Content="快捷全开" Style="{StaticResource GhostButtonStyle}" Click="QuickAll_Click" Tag="on" />
+        <Button Content="快捷全关" Style="{StaticResource GhostButtonStyle}" Click="QuickAll_Click" Tag="off" />
+        <TextBlock Text="启用" Style="{StaticResource MutedStyle}" Margin="12,0,6,0" />
+        <ToggleButton Style="{StaticResource SwitchStyle}" IsChecked="{Binding Input.SkillsEnabled}" />
+      </StackPanel>
+    </Grid>
+
+    <Border Style="{StaticResource CardStyle}">
+      <StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+          <controls:Icon Kind="keyboard" Width="14" Height="14" Stroke="{StaticResource AccentBrush}" VerticalAlignment="Center" />
+          <TextBlock Text="技能栏" Style="{StaticResource CardTitleStyle}" Margin="7,0,0,0" />
+        </StackPanel>
+
+        <ItemsControl ItemsSource="{Binding Input.Skills}" IsEnabled="{Binding Input.SkillsEnabled}">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <UniformGrid Columns="4" />
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <Border Background="{StaticResource PanelSoftBrush}" BorderBrush="{StaticResource LineSoftBrush}"
+                      BorderThickness="1" CornerRadius="6" Padding="7,6" Margin="0,0,6,6"
+                      ToolTip="{Binding PositionHint}">
+                <StackPanel>
+                  <Grid>
+                    <TextBlock Text="{Binding SlotNumber}" Style="{StaticResource TinyMutedStyle}" />
+                    <Button Style="{StaticResource IconButtonStyle}" Width="18" Height="18"
+                            HorizontalAlignment="Right" Click="ClearSlot_Click" Tag="{Binding}"
+                            IsEnabled="{Binding Key, Converter={StaticResource NotEmptyToBool}}"
+                            ToolTip="清除">
+                      <controls:Icon Kind="close" Width="8" Height="8" />
+                    </Button>
+                  </Grid>
+                  <controls:KeyCaptureButton Style="{StaticResource KeycapStyle}" Margin="0,4,0,0"
+                                             MinWidth="0" Height="29" HorizontalContentAlignment="Center"
+                                             Chord="{Binding Key, Mode=TwoWay}" />
+                  <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,6,0,0" ToolTip="快捷施法">
+                    <controls:Icon Kind="bolt" Width="10" Height="10" Stroke="{StaticResource MutedBrush}" VerticalAlignment="Center" />
+                    <ToggleButton Style="{StaticResource SwitchStyle}" Margin="4,0,0,0"
+                                  IsChecked="{Binding QuickCast}"
+                                  IsEnabled="{Binding Key, Converter={StaticResource NotEmptyToBool}}" />
+                  </StackPanel>
+                </StackPanel>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+      </StackPanel>
+    </Border>
+  </StackPanel>
+</UserControl>

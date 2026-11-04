@@ -1,0 +1,47 @@
+{
+  "id": "1.20e",
+  "displayName": "1.20e",
+  "versionPrefixes": ["1.20.4."],
+  "chat": {
+    "cguiGlobalRva": "0x84BC70",
+    "chatBarOffset": "0x3F0",
+    "textObjectOffset": "0x1E0",
+    "textBufferOffset": "0x1E4",
+    "isChattingRva": "0x84BBF8"
+  },
+  "ui": {
+    "escapeMenuOffset": "0x21C"
+  },
+  "skills": {
+    "commandBarOffset": "0x3BC",
+    "commandGridOffset": "0x154",
+    "commandFrameButtonOffset": "0x190",
+    "commandButtonHotkeyOffset": "0x5AC"
+  },
+  "camera": {
+    "setFieldRva": "0x2DD610"
+  },
+  "statusBars": {
+    "supported": true,
+    "allocCallRva": "0x166A14",
+    "updateCallRva": "0x167639",
+    "originalUpdateRva": "0x1D63D0",
+    "ctorRva": "0x1529A0",
+    "getUnitStateRva": "0x1C0030",
+    "unitScaleRva": "0",
+    "setBarPositionRva": "0x13780",
+    "setBarBoundsRva": "0x13AB0",
+    "getUnitUIDefRva": "0",
+    "isUnitStructureRva": "0",
+    "getLocalPlayerRva": "0x8722BC",
+    "getCPlayerWar3Rva": "0",
+    "cPlayerAttrRva": "0x314580",
+    "integerGetValueRva": "0x088E10",
+    "healthFlagOffset": "0"
+  },
+  "capabilities": {
+    "nativeChat": true,
+    "skillConvert": true,
+    "cameraDistance": true
+  }
+}

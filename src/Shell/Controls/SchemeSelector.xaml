@@ -1,0 +1,311 @@
+<UserControl x:Class="IWar3Key.Shell.Controls.SchemeSelector"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:IWar3Key.Shell.Controls"
+             VerticalAlignment="Center"
+             PreviewKeyDown="SchemeSelector_PreviewKeyDown">
+  <UserControl.Resources>
+    <Style x:Key="SchemeTriggerStyle" TargetType="ToggleButton">
+      <Setter Property="Height" Value="29" />
+      <Setter Property="MinWidth" Value="96" />
+      <Setter Property="MaxWidth" Value="132" />
+      <Setter Property="Padding" Value="8,0" />
+      <Setter Property="Background" Value="{StaticResource AppBrush}" />
+      <Setter Property="BorderBrush" Value="{StaticResource LineStrongBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="ToggleButton">
+            <Border x:Name="border"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="5"
+                    Padding="{TemplateBinding Padding}"
+                    SnapsToDevicePixels="True">
+              <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" />
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="border" Property="Background" Value="#F2F4F6" />
+                <Setter TargetName="border" Property="BorderBrush" Value="#C3C9D0" />
+              </Trigger>
+              <Trigger Property="IsChecked" Value="True">
+                <Setter TargetName="border" Property="Background" Value="#F7F8FA" />
+                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource AccentLineBrush}" />
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+    <Style x:Key="SchemeNameButtonStyle" TargetType="Button">
+      <Setter Property="Height" Value="27" />
+      <Setter Property="Padding" Value="5,0" />
+      <Setter Property="HorizontalContentAlignment" Value="Left" />
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+      <Setter Property="FontSize" Value="11" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border Background="{TemplateBinding Background}"
+                    Padding="{TemplateBinding Padding}"
+                    CornerRadius="4">
+              <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="Center" />
+            </Border>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+    <Style x:Key="SchemeActionButtonStyle" TargetType="Button" BasedOn="{StaticResource IconButtonStyle}">
+      <Setter Property="Width" Value="22" />
+      <Setter Property="Height" Value="22" />
+    </Style>
+
+    <Style x:Key="SchemeDeleteButtonStyle" TargetType="Button" BasedOn="{StaticResource DangerIconButtonStyle}">
+      <Setter Property="Width" Value="22" />
+      <Setter Property="Height" Value="22" />
+    </Style>
+
+    <Style x:Key="SchemeNewButtonStyle" TargetType="Button">
+      <Setter Property="Height" Value="28" />
+      <Setter Property="Padding" Value="7,0" />
+      <Setter Property="HorizontalContentAlignment" Value="Left" />
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="Foreground" Value="{StaticResource AccentBrush}" />
+      <Setter Property="FontSize" Value="10.5" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="border"
+                    Background="{TemplateBinding Background}"
+                    Padding="{TemplateBinding Padding}"
+                    CornerRadius="4">
+              <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="Center" />
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="border" Property="Background" Value="{StaticResource AccentSoftBrush}" />
+                <Setter Property="Foreground" Value="{StaticResource AccentDarkBrush}" />
+              </Trigger>
+              <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Opacity" Value="0.45" />
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+    <Style x:Key="SchemeRenameStyle" TargetType="TextBox" BasedOn="{StaticResource InputStyle}">
+      <Setter Property="Height" Value="25" />
+      <Setter Property="Margin" Value="3,0" />
+      <Setter Property="FontSize" Value="11" />
+      <Setter Property="MaxLength" Value="12" />
+    </Style>
+
+    <DataTemplate x:Key="SchemeRowTemplate">
+      <Border x:Name="RowBorder"
+              Background="Transparent"
+              CornerRadius="5"
+              Padding="1"
+              SnapsToDevicePixels="True">
+        <Border.Style>
+          <Style TargetType="Border">
+            <Style.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource AccentSoftBrush}" />
+              </Trigger>
+            </Style.Triggers>
+          </Style>
+        </Border.Style>
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="16" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+          </Grid.ColumnDefinitions>
+
+          <controls:Icon x:Name="Check"
+                         Grid.Column="0"
+                         Kind="check"
+                         Width="11"
+                         Height="11"
+                         Stroke="{StaticResource AccentBrush}"
+                         Visibility="Collapsed"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center" />
+
+          <Button x:Name="NameButton"
+                  Grid.Column="1"
+                  Style="{StaticResource SchemeNameButtonStyle}"
+                  Tag="{Binding}"
+                  Click="NameButton_Click">
+            <TextBlock Text="{Binding Name}"
+                       FontSize="11"
+                       TextTrimming="CharacterEllipsis"
+                       VerticalAlignment="Center" />
+          </Button>
+
+          <TextBox x:Name="NameEditor"
+                   Grid.Column="1"
+                   Style="{StaticResource SchemeRenameStyle}"
+                   Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                   Visibility="Collapsed"
+                   IsVisibleChanged="NameEditor_IsVisibleChanged"
+                   KeyDown="NameEditor_KeyDown" />
+
+          <StackPanel x:Name="Actions"
+                      Grid.Column="2"
+                      Orientation="Horizontal"
+                      Opacity="0.7">
+            <StackPanel.Style>
+              <Style TargetType="StackPanel">
+                <Style.Triggers>
+                  <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Border}}"
+                               Value="True">
+                    <Setter Property="Opacity" Value="1" />
+                  </DataTrigger>
+                  <DataTrigger Binding="{Binding IsActive}" Value="True">
+                    <Setter Property="Opacity" Value="1" />
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </StackPanel.Style>
+
+            <Button Style="{StaticResource SchemeActionButtonStyle}"
+                    Tag="{Binding}"
+                    Click="RenameButton_Click"
+                    ToolTip="重命名">
+              <controls:Icon Kind="pencil" Width="12" Height="12"
+                             Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
+            </Button>
+            <Button Style="{StaticResource SchemeActionButtonStyle}"
+                    Tag="{Binding}"
+                    Click="CopyButton_Click"
+                    ToolTip="复制">
+              <controls:Icon Kind="copy" Width="12" Height="12"
+                             Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
+            </Button>
+            <Button Style="{StaticResource SchemeDeleteButtonStyle}"
+                    Tag="{Binding}"
+                    Click="DeleteButton_Click"
+                    IsEnabled="{Binding CanDelete}"
+                    ToolTip="{Binding DeleteTip}"
+                    ToolTipService.ShowOnDisabled="True">
+              <controls:Icon Kind="trash" Width="12" Height="12"
+                             Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
+            </Button>
+          </StackPanel>
+        </Grid>
+      </Border>
+      <DataTemplate.Triggers>
+        <DataTrigger Binding="{Binding IsEditing}" Value="True">
+          <Setter TargetName="NameButton" Property="Visibility" Value="Collapsed" />
+          <Setter TargetName="NameEditor" Property="Visibility" Value="Visible" />
+          <Setter TargetName="Actions" Property="Visibility" Value="Collapsed" />
+        </DataTrigger>
+        <DataTrigger Binding="{Binding IsActive}" Value="True">
+          <Setter TargetName="Check" Property="Visibility" Value="Visible" />
+          <Setter TargetName="NameButton" Property="FontWeight" Value="SemiBold" />
+        </DataTrigger>
+      </DataTemplate.Triggers>
+    </DataTemplate>
+  </UserControl.Resources>
+
+  <Grid>
+    <ToggleButton x:Name="Trigger"
+                  Style="{StaticResource SchemeTriggerStyle}"
+                  ToolTip="物品、技能、按键映射与快捷喊话方案"
+                  PreviewMouseLeftButtonDown="Trigger_PreviewMouseLeftButtonDown">
+      <StackPanel Orientation="Horizontal">
+        <TextBlock Text="方案"
+                   FontSize="9"
+                   Foreground="{StaticResource MutedBrush}"
+                   VerticalAlignment="Center" />
+        <TextBlock x:Name="CurrentName"
+                   Margin="5,0,0,0"
+                   MaxWidth="70"
+                   FontSize="10.5"
+                   FontWeight="SemiBold"
+                   TextTrimming="CharacterEllipsis"
+                   VerticalAlignment="Center" />
+        <controls:Icon Kind="chevron"
+                       Width="10"
+                       Height="10"
+                       Margin="5,0,0,0"
+                       Stroke="{StaticResource Muted2Brush}"
+                       VerticalAlignment="Center">
+          <controls:Icon.Style>
+            <Style TargetType="controls:Icon">
+              <Style.Triggers>
+                <DataTrigger Binding="{Binding IsChecked, ElementName=Trigger}" Value="True">
+                  <Setter Property="RenderTransform">
+                    <Setter.Value>
+                      <RotateTransform Angle="180" />
+                    </Setter.Value>
+                  </Setter>
+                  <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
+                </DataTrigger>
+              </Style.Triggers>
+            </Style>
+          </controls:Icon.Style>
+        </controls:Icon>
+      </StackPanel>
+    </ToggleButton>
+
+    <Popup x:Name="DropDown"
+           Placement="Custom"
+           PlacementTarget="{Binding ElementName=Trigger}"
+           StaysOpen="True"
+           AllowsTransparency="True"
+           PopupAnimation="Fade"
+           IsOpen="{Binding IsChecked, ElementName=Trigger, Mode=TwoWay}"
+           Closed="DropDown_Closed">
+      <Border Width="238"
+              Margin="6"
+              Background="{StaticResource AppBrush}"
+              BorderBrush="{StaticResource LineStrongBrush}"
+              BorderThickness="1"
+              CornerRadius="7"
+              Padding="5"
+              PreviewKeyDown="SchemeSelector_PreviewKeyDown">
+        <Border.Effect>
+          <DropShadowEffect BlurRadius="18" ShadowDepth="3" Opacity="0.18" Direction="270" Color="#141E2D" />
+        </Border.Effect>
+        <StackPanel>
+          <ItemsControl x:Name="RowsHost"
+                        ItemTemplate="{StaticResource SchemeRowTemplate}"
+                        Focusable="False"
+                        HorizontalContentAlignment="Stretch" />
+          <Border Height="1" Margin="4,5" Background="{StaticResource LineSoftBrush}" />
+          <Button x:Name="NewButton"
+                  Style="{StaticResource SchemeNewButtonStyle}"
+                  Click="NewButton_Click">
+            <StackPanel Orientation="Horizontal">
+              <controls:Icon Kind="plus"
+                             Width="12"
+                             Height="12"
+                             Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
+              <TextBlock Text="新建方案" Margin="6,0,0,0" VerticalAlignment="Center" />
+            </StackPanel>
+          </Button>
+        </StackPanel>
+      </Border>
+    </Popup>
+  </Grid>
+</UserControl>

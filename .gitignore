@@ -8,3 +8,4 @@ docs/
 tools/refasm/
 analysis/
 AGENTS.md
+dist/

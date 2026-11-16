@@ -27,6 +27,17 @@ namespace IWar3Key.Shell.Interop
         {
             return Valid && VirtualKey == e.VirtualKey && Modifiers == e.Modifiers;
         }
+
+        // Shift is War3's order modifier (queued orders), not part of the
+        // hotkey identity. Accept one extra held Shift so a binding configured
+        // without it keeps working as Shift+key; the physical Shift still
+        // reaches the game. Ctrl/Alt/Win are never ignored.
+        public bool MatchesExtraShift(HookKeyEvent e)
+        {
+            return Valid && VirtualKey == e.VirtualKey &&
+                   (Modifiers & HotkeyModifiers.Shift) == 0 &&
+                   e.Modifiers == (Modifiers | HotkeyModifiers.Shift);
+        }
     }
 
     internal sealed class MacroRule

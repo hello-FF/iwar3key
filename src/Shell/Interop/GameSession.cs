@@ -1306,7 +1306,10 @@ namespace IWar3Key.Shell.Interop
             {
                 foreach (SkillConvertRule skill in rules.SkillConverts)
                 {
-                    if (!skill.Hotkey.Matches(e))
+                    // Treat Shift like the game does: Shift+skill key must
+                    // still reach the Agent for conversion, not fall through
+                    // to an item or mapping rule bound to the same key.
+                    if (!skill.Hotkey.Matches(e) && !skill.Hotkey.MatchesExtraShift(e))
                     {
                         continue;
                     }
@@ -1317,39 +1320,64 @@ namespace IWar3Key.Shell.Interop
                 }
             }
 
-            if (rules.ItemsEnabled)
-            {
-                foreach (ItemRule item in rules.Items)
-                {
-                    if (!item.Hotkey.Matches(e))
-                    {
-                        continue;
-                    }
+            // Shift+D must use the same item/command as D: the physical Shift
+            // stays down, so the game still treats the injected key as a
+            // shifted order. Exact bindings win over this implicit variant.
+            return TryItemRules(rules, e, false) ||
+                   TryMappingRules(rules, e, false) ||
+                   TryItemRules(rules, e, true) ||
+                   TryMappingRules(rules, e, true);
+        }
 
-                    Consume(e.VirtualKey);
-                    KeySender.SendItemKey(item.Slot);
-                    return true;
-                }
+        private bool TryItemRules(RuleSet rules, HookKeyEvent e, bool allowExtraShift)
+        {
+            if (!rules.ItemsEnabled)
+            {
+                return false;
             }
 
-            if (rules.MappingEnabled)
+            foreach (ItemRule item in rules.Items)
             {
-                foreach (MapRule mapping in rules.Mappings)
+                if (!MatchesHotkey(item.Hotkey, e, allowExtraShift))
                 {
-                    // The user presses the configured new key; the game
-                    // receives its native/original key.
-                    if (!mapping.NewKey.Matches(e))
-                    {
-                        continue;
-                    }
-
-                    Consume(e.VirtualKey);
-                    KeySender.SendChord(mapping.OriginalKey);
-                    return true;
+                    continue;
                 }
+
+                Consume(e.VirtualKey);
+                KeySender.SendItemKey(item.Slot);
+                return true;
             }
 
             return false;
+        }
+
+        private bool TryMappingRules(RuleSet rules, HookKeyEvent e, bool allowExtraShift)
+        {
+            if (!rules.MappingEnabled)
+            {
+                return false;
+            }
+
+            foreach (MapRule mapping in rules.Mappings)
+            {
+                // The user presses the configured new key; the game receives
+                // its native/original key.
+                if (!MatchesHotkey(mapping.NewKey, e, allowExtraShift))
+                {
+                    continue;
+                }
+
+                Consume(e.VirtualKey);
+                KeySender.SendChord(mapping.OriginalKey);
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool MatchesHotkey(ParsedHotkey hotkey, HookKeyEvent e, bool allowExtraShift)
+        {
+            return hotkey.Matches(e) || (allowExtraShift && hotkey.MatchesExtraShift(e));
         }
 
         private bool IsMacroCoolingDown(MacroRule macro)
